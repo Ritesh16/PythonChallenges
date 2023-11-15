@@ -39,3 +39,23 @@ class Snake:
     def down(self):
         if self.head.heading() != UP:
             self.head.setheading(270)
+
+    def check_snake_touches_top(self):
+        if self.head.ycor() > 280 and self.head.heading() == UP:
+            x_cor = self.head.xcor()
+            self.head.goto(x_cor, -280)
+
+    def check_snake_touches_right(self):
+        if self.head.xcor() > 280 and self.head.heading() == RIGHT:
+            y_cor = self.head.ycor()
+            self.head.goto(-280, y_cor)
+
+    def check_snake_touches_bottom(self):
+        if self.head.ycor() < -280 and self.head.heading() == DOWN:
+            x_cor = self.head.xcor()
+            self.head.goto(x_cor, 280)
+
+    def check_snake_touches_left(self):
+        if self.head.xcor() < -280 and self.head.heading() == LEFT:
+            y_cor = self.head.ycor()
+            self.head.goto(280, y_cor)

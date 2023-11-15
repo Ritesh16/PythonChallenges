@@ -30,8 +30,15 @@ while(game_is_on):
         food.refresh()
         scoreboard.increase_score()
 
-    if snake.head.xcor() > 280 or snake.head.xcor() < -280 or snake.head.ycor() > 280 or snake.head.ycor() < -280:
-        game_is_on = False
-        scoreboard.game_over()
+    #if snake.head.xcor() > 280 or snake.head.xcor() < -280 or snake.head.ycor() > 280 or snake.head.ycor() < -280:
+    #    game_is_on = False
+     #   scoreboard.game_over()
+
+    snake.check_snake_touches_top()
+    snake.check_snake_touches_right()
+    snake.check_snake_touches_bottom()
+    snake.check_snake_touches_left()
+
+
 
 screen.exitonclick()
