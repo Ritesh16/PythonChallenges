@@ -19,8 +19,6 @@ def start_timer():
     global reps
     reps += 1
 
-    print(reps)
-
     work_sec = WORK_MIN * 60
     short_break_sec = SHORT_BREAK_MIN * 60
     long_break_sec = LONG_BREAK_MIN * 60
@@ -32,14 +30,12 @@ def start_timer():
         count_down(short_break_sec)
         title_label.config(text="BREAK", fg=PINK)
     else:
-        print(work_sec)
         count_down(work_sec)
+        title_label.config(text="WORK", fg=GREEN)
 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
 def count_down(count):
-
-
     count_min = math.floor(count / 60)
     count_sec = count % 60
 
@@ -49,7 +45,12 @@ def count_down(count):
     canvas.itemconfig(timer_text, text = f"{count_min}:{count_sec}")
     if count > 0:
         window.after(1000, count_down, count - 1)
-
+    else:
+        start_timer()
+        marks = ""
+        for _ in range(math.floor(reps/2)):
+            marks += "✔"
+        check_marks.config(text=marks)
 # ---------------------------- UI SETUP ------------------------------- #
 
 window = Tk()
@@ -71,7 +72,7 @@ start_button.grid(row=2, column=0)
 reset_button = Button(text="Reset", highlightthickness=0)
 reset_button.grid(row=2, column=3)
 
-check_marks = Label(text="✔", fg=GREEN, bg=YELLOW, font=(FONT_NAME, 15, "bold"))
+check_marks = Label(fg=GREEN, bg=YELLOW, font=(FONT_NAME, 15, "bold"))
 check_marks.grid(column=1, row=3)
 
 window.mainloop()
