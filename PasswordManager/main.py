@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import os
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
@@ -11,8 +12,43 @@ def save():
 
     if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title="OOPS", message= "Please add valid website or password")
+    else:
+        is_ok = messagebox.askokcancel(title=website, message= f"You have entered the following:\nEmail: {email}\nPassword: {password}")
+
+        if is_ok:
+            existing_passwords = get_all_passwords()
+            existing_passwords[website] = f"{email}|{password}"
+
+            remove_file()
+
+            with open("data.txt", "a") as file:
+                for item in existing_passwords:
+                    file.write(f"{item}|{existing_passwords[item]}\n")
+
+                website_entry.delete(0, END)
+                password_entry.delete(0, END)
 
 
+def get_all_passwords():
+    list = {}
+
+    if not os.path.exists("data.txt"):
+        return list
+
+    with open("data.txt", "r") as file:
+        lines = file.readlines()
+        for line in lines:
+            data = line.split('|')
+            list[data[0].strip()] = data[1] + "|" + data[2]
+            print(line)
+
+    return list
+
+def remove_file():
+    if os.path.exists("data.txt"):
+        os.remove("data.txt")
+    else:
+        print("File not found.")
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
