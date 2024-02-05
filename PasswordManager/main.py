@@ -20,10 +20,10 @@ def save():
             existing_passwords[website] = f"{email}|{password}"
 
             remove_file()
-
+            print(existing_passwords)
             with open("data.txt", "a") as file:
                 for item in existing_passwords:
-                    file.write(f"{item}|{existing_passwords[item]}\n")
+                    file.write(f"{item}|{existing_passwords[item]}" + "\n")
 
                 website_entry.delete(0, END)
                 password_entry.delete(0, END)
@@ -38,17 +38,16 @@ def get_all_passwords():
     with open("data.txt", "r") as file:
         lines = file.readlines()
         for line in lines:
-            data = line.split('|')
-            list[data[0].strip()] = data[1] + "|" + data[2]
-            print(line)
+            line = line.strip()
+            if line not in (None, ""):
+                data = line.split('|')
+                list[data[0].strip()] = data[1] + "|" + data[2]
 
     return list
 
 def remove_file():
     if os.path.exists("data.txt"):
         os.remove("data.txt")
-    else:
-        print("File not found.")
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
