@@ -1,8 +1,28 @@
 from tkinter import *
 from tkinter import messagebox
 import os
+from random import choice, shuffle, randint
+import pyperclip
+import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+#Password Generator Project
+def generate_password():
+    letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
+
+    password_letters = [choice(letters) for _ in range(randint(8,10))]
+    password_symbols = [choice(symbols) for _ in range(randint(2,4))]
+    password_numbers = [choice(numbers) for _ in range(randint(2,4))]
+
+    password_list = password_letters + password_symbols + password_numbers
+    shuffle(password_list)
+
+    password = "".join(password_list)
+    password_entry.delete(0, END)
+    password_entry.insert(0, password)
+    pyperclip.copy(password)
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save():
@@ -10,44 +30,34 @@ def save():
     email = email_entry.get()
     password = password_entry.get()
 
+    new_data = {
+        website: {
+            "email": email,
+            "password": password
+        }
+    }
+
     if len(website) == 0 or len(password) == 0:
         messagebox.showinfo(title="OOPS", message= "Please add valid website or password")
     else:
         is_ok = messagebox.askokcancel(title=website, message= f"You have entered the following:\nEmail: {email}\nPassword: {password}")
+        data = {}
 
         if is_ok:
-            existing_passwords = get_all_passwords()
-            existing_passwords[website] = f"{email}|{password}"
+            try:
+                with open("data.json", "r") as data_file:
+                    data = json.load(data_file)
+            except FileNotFoundError:
+                with open("data.json", "w") as data_file:
+                    json.dump(new_data, data_file, indent= 4)
+            else:
+                data.update(new_data)
 
-            remove_file()
-            print(existing_passwords)
-            with open("data.txt", "a") as file:
-                for item in existing_passwords:
-                    file.write(f"{item}|{existing_passwords[item]}" + "\n")
-
+                with open("data.json", "w") as data_file:
+                    json.dump(data, data_file, indent=4)
+            finally:
                 website_entry.delete(0, END)
                 password_entry.delete(0, END)
-
-
-def get_all_passwords():
-    list = {}
-
-    if not os.path.exists("data.txt"):
-        return list
-
-    with open("data.txt", "r") as file:
-        lines = file.readlines()
-        for line in lines:
-            line = line.strip()
-            if line not in (None, ""):
-                data = line.split('|')
-                list[data[0].strip()] = data[1] + "|" + data[2]
-
-    return list
-
-def remove_file():
-    if os.path.exists("data.txt"):
-        os.remove("data.txt")
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -78,7 +88,7 @@ password_entry = Entry(width=21)
 password_entry.grid(row=3, column=1)
 
 #Button
-generate_button = Button(text="Generate Button")
+generate_button = Button(text="Generate Button", command=generate_password)
 generate_button.grid(row=3, column=2)
 add_button = Button(text="Add", width=36, command=save)
 add_button.grid(row=4, column=1, columnspan=2)
