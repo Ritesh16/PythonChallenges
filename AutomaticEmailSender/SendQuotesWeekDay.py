@@ -24,7 +24,7 @@ def get_emails():
         return emails
 def main():
     day = dt.datetime.now().weekday()
-    if day == 2:
+    if day == 3:
         quote = get_random_quote()
         email_list = get_emails()
         if len(email_list) == 0:
