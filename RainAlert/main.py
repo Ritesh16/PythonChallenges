@@ -1,8 +1,10 @@
 import requests
-from twilio.rest import Client
+import os
+from dotenv import dotenv_values, load_dotenv
 
+load_dotenv()
 API_URL = "https://api.openweathermap.org/data/2.5/forecast"
-API_KEY = "365a4a387b5b975d837542823db00e93"
+API_KEY = os.getenv("WEATHER_API_KEY")
 LAT = 39.52
 LON = -75.72
 RECORDS_TO_FETCH = 4
@@ -26,5 +28,5 @@ for hour_data in weather_data["list"]:
 
 if will_it_rain:
     print("Bring an umbrella.")
-
-    18773569744
+else:
+    print("No rain")
