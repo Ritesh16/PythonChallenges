@@ -1,4 +1,5 @@
 import requests
+from datetime import datetime
 
 class Service:
     pixela_endpoint = "https://pixe.la/v1/users"
@@ -30,8 +31,33 @@ class Service:
         }
 
         graph_url = f"{self.pixela_endpoint}/{user_name}/graphs"
-        print(graph_url)
 
         response = requests.post(url=graph_url, json=graph_params, headers=headers)
         response.raise_for_status()
+        print(response.text)
+
+    def get_graph(self, user_name: str, graph_id: str):
+        url = f"{self.pixela_endpoint}/{user_name}/graphs/{graph_id}"
+        response = requests.get(url)
+        print(response.text)
+
+    def add_value_graph(self, user_name: str, graph_id : str, val: str, token:str):
+        url = f"{self.pixela_endpoint}/{user_name}/graphs/{graph_id}"
+        date = datetime.now().strftime("%Y%m%d")
+
+        add_value_params = {
+            "date" : date,
+            "quantity": val
+        }
+
+        headers = {
+            "X-USER-TOKEN": token
+        }
+
+        print(url)
+
+        response = requests.post(url, json=add_value_params, headers=headers)
+        #
+        response.raise_for_status()
+
         print(response.text)
