@@ -1,3 +1,5 @@
+import datetime
+
 from service import Service
 from dotenv import  load_dotenv
 import os
@@ -16,4 +18,12 @@ service = Service()
 #service.get_graph(user_name, "graph1")
 
 # add activity to graph
-service.add_value_graph(user_name, "graph1", "2.512", token)
+#service.add_value_graph(user_name, "graph1", "2.512", token)
+
+date = datetime.datetime(2024, 4, 30).strftime("%Y%m%d")
+
+#Update activity
+#service.update_graph_value(user_name, "graph1", "20240430", token, "9.5")
+
+#delete actibity
+service.delete_pixel(user_name, "graph1", date, token)

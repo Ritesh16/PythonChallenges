@@ -54,10 +54,34 @@ class Service:
             "X-USER-TOKEN": token
         }
 
-        print(url)
-
         response = requests.post(url, json=add_value_params, headers=headers)
-        #
+
         response.raise_for_status()
 
+    def update_graph_value(self, user_name: str, graph_id: str, date_to_update: str, token: str, new_value: str):
+        update_endpoint = f"{self.pixela_endpoint}/{user_name}/graphs/{graph_id}/{date_to_update}"
+
+        new_data = {
+            "quantity": f"{new_value}"
+        }
+
+        headers = {
+            "X-USER-TOKEN": token
+        }
+
+        response = requests.put(url=update_endpoint, json=new_data, headers=headers)
+        response.raise_for_status()
+
+    def delete_pixel(self, user_name: str, graph_id: str, date_to_update: str, token: str):
+        delete_endpoint = f"{self.pixela_endpoint}/{user_name}/graphs/{graph_id}/{date_to_update}"
+
+        headers = {
+            "X-USER-TOKEN": token
+        }
+
+        response = requests.delete(url=delete_endpoint, headers=headers)
+
         print(response.text)
+
+
+
